@@ -79,6 +79,8 @@ class EcoBot:
         import torch
         from sentence_transformers import SentenceTransformer
         from transformers import AutoModelForCausalLM, AutoTokenizer
+        # Prevent excessive CPU thread allocation in a shared free-hosting environment.
+        torch.set_num_threads(1)
         self.np, self.torch = np, torch
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.encoder = SentenceTransformer(CONFIG.embedder, device=self.device)
@@ -100,7 +102,7 @@ class EcoBot:
         dtype = torch.float16 if self.device=='cuda' else torch.float32
         import inspect
         parameter = 'dtype' if 'dtype' in inspect.signature(AutoModelForCausalLM.from_pretrained).parameters else 'torch_dtype'
-        self.model = AutoModelForCausalLM.from_pretrained(CONFIG.llm, **{parameter:dtype}).to(self.device)
+        self.model = AutoModelForCausalLM.from_pretrained(CONFIG.llm, **{parameter:dtype}, low_cpu_mem_usage=False).to(self.device)
         self.model.eval()
 
     def retrieve(self, question):

@@ -1,7 +1,11 @@
+# Deployment target: Streamlit Community Cloud, Python 3.11, CPU-only.
+# The additional index provides the CPU build of PyTorch without NVIDIA CUDA libraries.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.5.1+cpu
 streamlit>=1.39,<2
-transformers>=4.45,<5
+transformers>=4.45,<4.58
 sentence-transformers>=3,<6
 chromadb>=1,<2
 numpy>=1.26,<3
-torch>=2.3,<3
 python-dateutil>=2.9.0.post0,<3
