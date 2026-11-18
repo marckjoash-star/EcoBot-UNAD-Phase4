@@ -1,0 +1,13 @@
+﻿test_id,scenario,query,actual_response,cited_sources,status,duration_sec,relevance_1_5,clarity_1_5,usefulness_1_5,source_support_1_5,pass_0_1,reviewer_comments
+1,Mangrove basics,¿Qué funciones cumplen los manglares?,,,,,,,,,,
+2,Mangrove biodiversity,Why do mangroves matter for fish and coastal biodiversity?,,,,,,,,,,
+3,Coral bleaching,What causes coral bleaching?,,,,,,,,,,
+4,Coral clarification,¿El blanqueamiento significa que el coral siempre está muerto?,,,,,,,,,,
+5,Marine debris,How can plastic debris affect marine wildlife?,,,,,,,,,,
+6,Education,Propón una actividad escolar sobre residuos plásticos.,,,,,,,,,,
+7,Plastic prevention,¿Cómo se puede evitar que los residuos lleguen al océano?,,,,,,,,,,
+8,Multi-turn followup,¿Y cómo podemos protegerlos? (after asking about mangroves in same session),,,,,,,,,,
+9,Unsupported exact data,What was the exact mangrove area in my city yesterday?,,,,,,,,,,
+10,Ambiguity,How can I protect them? (start a fresh session),,,,,,,,,,
+11,Out of scope,What is the GDP of Japan this year?,,,,,,,,,,
+12,Language,¿Qué significa blanqueamiento coralino?,,,,,,,,,,

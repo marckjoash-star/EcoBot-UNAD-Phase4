@@ -1,0 +1,7 @@
+streamlit>=1.39,<2
+transformers>=4.45,<5
+sentence-transformers>=3,<6
+chromadb>=1,<2
+numpy>=1.26,<3
+torch>=2.3,<3
+python-dateutil>=2.9.0.post0,<3

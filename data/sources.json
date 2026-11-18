@@ -1,0 +1,57 @@
+[
+  {
+    "id": "noaa_mangrove",
+    "title": "What is a mangrove forest?",
+    "url": "https://oceanservice.noaa.gov/facts/mangroves.html",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "2026-09-23",
+    "topic": "mangroves",
+    "license_note": "NOAA-produced public-domain material unless otherwise noted. Educational paraphrase produced for EcoBot; not a verbatim full-page ingestion.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "NOAA describes mangroves as trees and shrubs living in intertidal coastal environments, especially tropical and subtropical areas. Mangrove trees tolerate waterlogged, oxygen-poor soils. Their complex roots slow tidal currents, encourage fine sediments to settle, and provide shelter and feeding habitats for fish and other coastal organisms. Mangrove forests also help stabilize shorelines and can reduce erosion from waves, tides and storm surges. These functions vary according to local conditions and forest health. In Spanish, los manglares son árboles y arbustos de zonas costeras intermareales; sus raíces ofrecen refugio a peces y ayudan a retener sedimentos y estabilizar las costas."
+  },
+  {
+    "id": "noaa_bleaching",
+    "title": "What is coral bleaching?",
+    "url": "https://oceanservice.noaa.gov/facts/coral_bleach.html",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "2026-09-23",
+    "topic": "coral reefs",
+    "license_note": "NOAA-produced public-domain material unless otherwise noted. Educational paraphrase produced for EcoBot; not a verbatim full-page ingestion.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "NOAA explains that coral bleaching occurs when stressful environmental conditions disrupt the relationship between corals and symbiotic algae. Elevated seawater temperature is a major cause, but altered light, pollution and other environmental stresses may also contribute. Corals that lose their algae become pale or white. A bleached coral is not necessarily dead; recovery can occur if conditions improve, although prolonged stress increases the risk of mortality. Educational responses should avoid implying that bleaching always kills coral immediately. En español, el blanqueamiento coralino se asocia frecuentemente con temperaturas elevadas; un coral blanqueado puede sobrevivir, pero permanece vulnerable."
+  },
+  {
+    "id": "noaa_marine_debris",
+    "title": "What is marine debris?",
+    "url": "https://oceanservice.noaa.gov/facts/marinedebris.html",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "2021-01-04",
+    "topic": "marine debris",
+    "license_note": "NOAA-produced public-domain material unless otherwise noted. Educational paraphrase produced for EcoBot; not a verbatim full-page ingestion.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "NOAA defines marine debris as persistent manufactured or processed solid material abandoned or disposed of in marine environments or the Great Lakes, whether deliberately or unintentionally. Examples include plastic bags, beverage containers, discarded fishing gear and abandoned vessels. Debris can harm marine organisms through entanglement and injury; it can also interfere with navigation and affect human health. Trash transported by storm drains or originating from activities along shorelines contributes to the problem. En español, los residuos marinos abarcan plásticos y artes de pesca abandonadas; pueden lesionar animales y llegar al mar a través de drenajes y actividades costeras."
+  },
+  {
+    "id": "noaa_plastic",
+    "title": "What is marine debris? Coastal Pollution Tutorial",
+    "url": "https://oceanservice.noaa.gov/education/tutorial-coastal/marine-debris/md01.html",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "2026-09-23",
+    "topic": "plastic pollution",
+    "license_note": "NOAA-produced public-domain material unless otherwise noted. Educational paraphrase produced for EcoBot; not a verbatim full-page ingestion.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "NOAA's coastal pollution educational tutorial identifies plastic litter, wrappers, bottles and lost fishing gear as common marine debris. Animals may become entangled in discarded gear or ingest plastic fragments after mistaking them for food. Rainfall, wind, streams and storm drains can transport land-based waste into the ocean. Small plastic particles are called microplastics when they are below five millimeters. Prevention activities include reducing unnecessary disposable products, disposing of waste appropriately and taking part in supervised local cleanup events. A classroom may organize a safe waste audit or plan a reduction campaign. En español, la basura terrestre puede llegar al océano con la lluvia; reducir desechables y disponer los residuos correctamente ayuda a prevenirla."
+  },
+  {
+    "id": "noaa_plastic_fact",
+    "title": "Plastic Marine Debris Fact Sheet",
+    "url": "https://marinedebris.noaa.gov/fact-sheets/plastic-marine-debris-fact-sheet",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "2025-04-16",
+    "topic": "plastic education",
+    "license_note": "NOAA-produced public-domain material unless otherwise noted. Educational paraphrase produced for EcoBot; not a verbatim full-page ingestion.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "The NOAA Marine Debris Program provides an educational fact sheet on plastic marine debris for secondary-school, college and adult audiences. It introduces the types and sources of plastic waste, impacts, microplastics and ways people can help. EcoBot may use this resource to direct educators to a publicly available teaching material, but this summary does not reproduce the full PDF. For classroom use, students can research the origin of commonly discarded plastics, compare prevention approaches and propose a local awareness campaign. En español, esta ficha de NOAA ofrece material para comprender las fuentes e impactos de los residuos plásticos y promover actividades de educación ambiental."
+  }
+]
