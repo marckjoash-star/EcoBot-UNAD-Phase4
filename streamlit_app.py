@@ -72,4 +72,6 @@ if q:
                 for s in result['sources']:
                     st.markdown(f"**[{s['label']}] {s['title']}** — [NOAA source]({s['url']})")
         st.caption('Status: '+result['status'] + ' · Generation: '+str(result['duration_sec'])+' s')
+        if result['status']=='evidence_based_summary':
+            st.caption('Evidence-based summary from documented NOAA records; not free-form model generation.')
     st.session_state.history.append({'role':'assistant','content':result['answer'],'sources':result['sources']})

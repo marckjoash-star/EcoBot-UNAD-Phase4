@@ -53,5 +53,38 @@
     "license_note": "NOAA-produced public-domain material unless otherwise noted. Educational paraphrase produced for EcoBot; not a verbatim full-page ingestion.",
     "source_type": "verified_source_based_paraphrase",
     "text": "The NOAA Marine Debris Program provides an educational fact sheet on plastic marine debris for secondary-school, college and adult audiences. It introduces the types and sources of plastic waste, impacts, microplastics and ways people can help. EcoBot may use this resource to direct educators to a publicly available teaching material, but this summary does not reproduce the full PDF. For classroom use, students can research the origin of commonly discarded plastics, compare prevention approaches and propose a local awareness campaign. En español, esta ficha de NOAA ofrece material para comprender las fuentes e impactos de los residuos plásticos y promover actividades de educación ambiental."
+  },
+  {
+    "id": "noaa_blue_carbon",
+    "title": "What is blue carbon?",
+    "url": "https://oceanservice.noaa.gov/facts/bluecarbon.html",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "n.d.",
+    "topic": "blue carbon",
+    "license_note": "Educational paraphrase based on public NOAA facts page; verify usage notices on original webpage.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "NOAA explains that blue carbon is carbon captured and stored by ocean and coastal ecosystems. Mangroves, seagrasses and salt marshes absorb atmospheric carbon dioxide and store carbon in their vegetation and coastal soils. Carbon can remain in wetland sediments for long periods. Conservation of these ecosystems supports biodiversity and climate mitigation. In Spanish: Los manglares sí están directamente relacionados con el almacenamiento de carbono azul. Capturan dióxido de carbono y guardan carbono en troncos, raíces y especialmente en suelos y sedimentos costeros. Su conservación ayuda a mantener esos depósitos."
+  },
+  {
+    "id": "noaa_blue_carbon_detail",
+    "title": "Coastal Blue Carbon",
+    "url": "https://oceanservice.noaa.gov/ecosystems/coastal-blue-carbon/",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "n.d.",
+    "topic": "blue carbon",
+    "license_note": "Educational paraphrase based on NOAA coastal blue carbon page; verify usage notices on original webpage.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "Coastal wetlands such as mangrove forests, tidal marshes and seagrass meadows can store large quantities of carbon. NOAA reports that most coastal blue carbon is stored in soil rather than aboveground plants. These coastal ecosystems can accumulate organic material in waterlogged soils, slowing decomposition. Carbon storage is an ecosystem service, not a guaranteed measurement for a particular location. En español: El carbono azul se almacena principalmente en los suelos de manglares, pastos marinos y marismas. La cantidad depende de las condiciones locales, y no debe inventarse una cifra exacta."
+  },
+  {
+    "id": "noaa_plastic_ingestion",
+    "title": "Ingestion: Why is marine debris a problem?",
+    "url": "https://marinedebris.noaa.gov/why-marine-debris-problem/ingestion",
+    "author": "NOAA Marine Debris Program",
+    "date": "n.d.",
+    "topic": "plastic ingestion",
+    "license_note": "Educational paraphrase based on NOAA Marine Debris Program material; not a reproduction of full original.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "According to NOAA, marine animals including fish, birds, turtles and mammals can ingest plastic debris. Ingestion can produce a false sensation of fullness, reduce nutrition, injure the digestive tract, block intestines and lead to starvation or death. These effects depend on the organism and material ingested. No claim is made that eating plastic directly causes giardiasis. En español: Ingerir plástico puede provocar obstrucciones intestinales, lesiones internas y desnutrición en animales marinos; no debe atribuirse giardiasis a este mecanismo sin evidencia."
   }
 ]
