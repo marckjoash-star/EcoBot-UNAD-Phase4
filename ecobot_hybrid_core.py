@@ -135,50 +135,68 @@ def chat(question, memory, token, model=DEFAULT_MODEL, docs=None, timeout=120):
         'stream':False,
     }
     try:
-        response=requests.post(
-            ENDPOINT,
-            headers={'Authorization':'Bearer '+token.strip(), 'Content-Type':'application/json'},
-            json=payload,
-            timeout=(15, timeout),
-        )
-        if response.status_code != 200:
-            # Do not print request headers or credentials.
-            diagnostic = response.text[:500].replace(token.strip(), '[REDACTED]')
-            logger.warning('Hugging Face HTTP %s: %s', response.status_code, diagnostic)
-            kind='quota_or_authentication' if response.status_code in (401,402,403,429) else 'provider_error'
-            msg=(f'El proveedor devolvió HTTP {response.status_code}. Revisa los registros de Streamlit para conocer el motivo.' if spanish(question) else f'Inference provider returned HTTP {response.status_code}. Check Streamlit logs for details.')
-            return {'answer':msg,'sources':sources_from(evidence),'status':kind,'model_used':False}
-        data=response.json()
-        choices=data.get('choices') if isinstance(data,dict) else None
-        if not isinstance(choices,list) or not choices:
-            logger.warning('Unexpected response shape. Top-level keys: %s', list(data)[:12] if isinstance(data,dict) else type(data).__name__)
-            raise ValueError('Unexpected API response shape')
-        message=choices[0].get('message') or {}
-        content=message.get('content')
-        if isinstance(content,list):
-            answer='\n'.join(str(part.get('text','')) for part in content if isinstance(part,dict)).strip()
-        else:
-            answer=str(content or '').strip()
-        if not answer:
-            # Qwen3.5 may consume its output budget in internal reasoning before
-            # producing visible text. Never display or log reasoning_content.
-            finish_reason = choices[0].get('finish_reason', 'unknown')
-            usage = data.get('usage') or {}
-            logger.warning(
-                'Empty visible completion: finish_reason=%s; completion_tokens=%s; '
-                'message_keys=%s. Reasoning content is not logged.',
-                finish_reason, usage.get('completion_tokens', 'unknown'),
-                list(message.keys()),
+        # One bounded retry is allowed ONLY when the first successful response
+        # contains no visible text. Do not retry authentication/quota errors.
+        for attempt in range(2):
+            if attempt == 1:
+                # The provider may use the entire first budget for reasoning.
+                # On the retry, request a short final answer and allow a larger
+                # output budget without relying on provider-specific parameters.
+                payload = dict(payload)
+                payload['max_tokens'] = 1800
+                payload['messages'] = messages + [{
+                    'role': 'user',
+                    'content': ('Please provide your final answer directly, in 2–4 '
+                                'sentences, using only the documentary evidence '
+                                'above. Include source citations where applicable. '
+                                'Do not give an internal reasoning transcript.')
+                }]
+                logger.info('Retrying an empty visible completion once (higher token budget).')
+
+            response = requests.post(
+                ENDPOINT,
+                headers={'Authorization':'Bearer '+token.strip(), 'Content-Type':'application/json'},
+                json=payload,
+                timeout=(15, timeout),
             )
-            err = ('El modelo respondió sin texto visible. Puede haber agotado el límite de tokens '
-                   'durante su razonamiento. Intenta una pregunta más breve y revisa los registros.'
-                   if spanish(question) else
-                   'The model returned no visible answer. It may have exhausted its token budget '
-                   'while reasoning. Try a shorter question and inspect the logs.')
-            return {'answer': err, 'sources': sources_from(evidence),
-                    'status': 'empty_model_response', 'model_used': False}
-        memory.add(question,answer)
-        return {'answer':answer,'sources':sources_from(evidence),'status':'generated_with_remote_llm','model_used':True}
+            if response.status_code != 200:
+                diagnostic = response.text[:500].replace(token.strip(), '[REDACTED]')
+                logger.warning('Hugging Face HTTP %s: %s', response.status_code, diagnostic)
+                kind='quota_or_authentication' if response.status_code in (401,402,403,429) else 'provider_error'
+                msg=(f'El proveedor devolvió HTTP {response.status_code}. Revisa los registros de Streamlit para conocer el motivo.' if spanish(question) else f'Inference provider returned HTTP {response.status_code}. Check Streamlit logs for details.')
+                return {'answer':msg,'sources':sources_from(evidence),'status':kind,'model_used':False}
+
+            data=response.json()
+            choices=data.get('choices') if isinstance(data,dict) else None
+            if not isinstance(choices,list) or not choices:
+                logger.warning('Unexpected response shape. Top-level keys: %s', list(data)[:12] if isinstance(data,dict) else type(data).__name__)
+                raise ValueError('Unexpected API response shape')
+            message=choices[0].get('message') or {}
+            content=message.get('content')
+            if isinstance(content,list):
+                answer='\n'.join(str(part.get('text','')) for part in content if isinstance(part,dict)).strip()
+            else:
+                answer=str(content or '').strip()
+            if answer:
+                memory.add(question,answer)
+                return {'answer':answer,'sources':sources_from(evidence),
+                        'status':'generated_with_remote_llm','model_used':True}
+
+            # Never display or log provider reasoning content.
+            finish_reason=choices[0].get('finish_reason','unknown')
+            usage=data.get('usage') or {}
+            logger.warning('Empty visible completion on attempt %s: '
+                           'finish_reason=%s; completion_tokens=%s; message_keys=%s',
+                           attempt+1, finish_reason, usage.get('completion_tokens','unknown'),
+                           list(message.keys()))
+
+        err = ('El modelo no produjo texto visible después de dos intentos. '
+               'Puedes volver a intentarlo; este incidente también sirve para '
+               'evaluar la estabilidad de EcoBot.' if spanish(question) else
+               'The model returned no visible answer after two attempts. '
+               'Please try again; this issue is useful for evaluating EcoBot reliability.')
+        return {'answer':err,'sources':sources_from(evidence),
+                'status':'empty_model_response','model_used':False}
     except requests.exceptions.Timeout:
         logger.warning('Hugging Face request timed out after %ss (read timeout).',timeout)
         return {'answer':('La consulta tardó demasiado y agotó el tiempo de espera. Intenta nuevamente.' if spanish(question) else 'The request timed out. Please retry.'),'sources':sources_from(evidence),'status':'timeout_error','model_used':False}
