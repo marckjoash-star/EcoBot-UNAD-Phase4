@@ -86,5 +86,27 @@
     "license_note": "Educational paraphrase based on NOAA Marine Debris Program material; not a reproduction of full original.",
     "source_type": "verified_source_based_paraphrase",
     "text": "According to NOAA, marine animals including fish, birds, turtles and mammals can ingest plastic debris. Ingestion can produce a false sensation of fullness, reduce nutrition, injure the digestive tract, block intestines and lead to starvation or death. These effects depend on the organism and material ingested. No claim is made that eating plastic directly causes giardiasis. En español: Ingerir plástico puede provocar obstrucciones intestinales, lesiones internas y desnutrición en animales marinos; no debe atribuirse giardiasis a este mecanismo sin evidencia."
+  },
+  {
+    "id": "noaa_caribbean_species",
+    "title": "Estuaries Tutorial: Mangrove Habitats and Species",
+    "author": "NOAA National Ocean Service",
+    "url": "https://oceanservice.noaa.gov/education/tutorial_estuaries/est06_habitats.html",
+    "topic": "mangrove species Caribbean",
+    "source_type": "educational_paraphrase",
+    "access_date": "2026-11-18",
+    "content": "In the Caribbean and Florida coastal habitats, the three commonly described mangrove trees are red mangrove (Rhizophora mangle), black mangrove (Avicennia germinans), and white mangrove (Laguncularia racemosa). Red mangrove has arching prop roots and often occurs near the water; black mangrove has upward-growing breathing roots called pneumatophores; white mangrove is often found farther landward. Buttonwood (Conocarpus erectus) is a mangrove associate and is not considered a true mangrove species in this NOAA habitat description. These habitats provide nursery grounds, shelter, coastal protection and sediment retention.",
+    "notes": "Educational paraphrase of a NOAA estuaries educational page; verify against original site."
+  },
+  {
+    "id": "noaa_species_global",
+    "title": "July 26 is International Mangrove Conservation Day",
+    "author": "NOAA Fisheries",
+    "url": "https://www.fisheries.noaa.gov/news/july-26-international-mangrove-conservation-day",
+    "topic": "mangrove species worldwide conservation",
+    "source_type": "educational_paraphrase",
+    "access_date": "2026-11-18",
+    "content": "NOAA Fisheries describes more than 80 mangrove tree species globally. Caribbean mangroves include red, black and white mangrove species. Not all mangrove species occur in the Caribbean. Mangroves protect coasts and support fisheries and wildlife.",
+    "notes": "Educational paraphrase from NOAA Fisheries."
   }
 ]
