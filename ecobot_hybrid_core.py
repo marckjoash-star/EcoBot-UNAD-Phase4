@@ -16,7 +16,7 @@ logger = logging.getLogger("ecobot.remote")
 DATA_PATH = Path(__file__).resolve().parent / 'data' / 'sources.json'
 ENDPOINT = 'https://router.huggingface.co/v1/chat/completions'
 DEFAULT_MODEL = 'Qwen/Qwen3-4B-Instruct-2507'
-STOPWORDS = set(('de la el las los en por para que con una un unos unas y o es son a del al su sus se como cual cuales qué cómo what are is the of for to in and a an do does can how why we it them those about me please tell tengo dime existe hay species especies manglar manglares mangrove mangroves').split())
+STOPWORDS = set(('de la el las los en por para que con una un unos unas y o es son a del al su sus se como cual cuales qué cómo what are is the of for to in and a an do does can how why we it them those about me please tell tengo dime existe hay species especies ').split())
 SYNONYMS = {
     'especies': 'species red black white rhizophora avicennia laguncularia',
     'species': 'especies red black white rhizophora avicennia laguncularia',
@@ -29,6 +29,14 @@ SYNONYMS = {
     'plastico': 'plastic marine debris ingestion entanglement',
     'plastic': 'plastico marine debris ingestion entanglement',
     'proteger': 'conservation restoration protection',
+    'function': 'coastal biodiversity habitat shelter protection ecosystems',
+    'functions': 'coastal biodiversity habitat shelter protection ecosystems',
+    'funcion': 'habitat shelter coastal erosion roots biodiversity ecosystems',
+    'funciones': 'habitat shelter coastal erosion roots biodiversity ecosystems',
+    'corals': 'coral reefs bleaching symbiotic algae ocean marine',
+    'coral': 'corals reef bleaching symbiotic algae',
+    'mangroves': 'mangrove mangroves coastal roots habitat shoreline sediment',
+    'mangrove': 'mangroves coastal roots habitat shoreline sediment',
 }
 
 def norm(s):
@@ -71,6 +79,9 @@ def retrieve(query, docs, top_k=3):
     for word, additional in SYNONYMS.items():
         if re.search(r'\b'+re.escape(word)+r'\b',expanded): expanded+=' '+additional
     query_tokens=tokens(expanded)
+    original=norm(query)
+    wants_mangrove=bool(re.search(r'\b(mangrove|mangroves|manglar|manglares)\b',original))
+    wants_coral=bool(re.search(r'\b(coral|corals|reef|reefs|arrecife|arrecifes|corales)\b',original))
     all_docs=[tokens(str(d.get('title',''))+' '+str(d.get('topic',''))+' '+body(d)) for d in docs]
     n=max(1,len(docs)); avg=max(1,sum(map(len,all_docs))/n)
     document_frequency=Counter(t for dt in all_docs for t in set(dt))
@@ -84,12 +95,59 @@ def retrieve(query, docs, top_k=3):
             idf=math.log(1+(n-document_frequency[word]+.5)/(document_frequency[word]+.5))
             score += idf*tf[word]*2.2/(tf[word]+1.2*(.25+.75*length/avg))
             if word in title: score+=1.0
+        doc_topic=norm(str(d.get('topic',''))+' '+str(d.get('title','')))
+        is_mangrove=bool(re.search(r'mangrov|manglar|blue carbon',doc_topic))
+        is_coral=bool(re.search(r'coral|reef',doc_topic))
+        if wants_mangrove and is_mangrove: score+=5
+        if wants_mangrove and ('function' in original or 'funcion' in original or 'role' in original) and d.get('id')=='noaa_mangrove': score+=8
+        if wants_coral and ('function' in original or 'funcion' in original or 'role' in original) and d.get('id')=='noaa_coral_reef_functions': score+=8
+        if wants_coral and is_coral: score+=5
+        if wants_mangrove and not wants_coral and is_coral: score*=0.1
+        if wants_coral and not wants_mangrove and is_mangrove: score*=0.1
         if score>0: ranked.append((score,d))
     ranked.sort(key=lambda p:p[0],reverse=True)
+    if wants_mangrove and wants_coral:
+        mangrove=next((d for _,d in ranked if re.search(r'mangrov|manglar',norm(str(d.get('topic',''))+' '+str(d.get('title',''))))),None)
+        coral=next((d for _,d in ranked if re.search(r'coral|reef',norm(str(d.get('topic',''))+' '+str(d.get('title',''))))),None)
+        selected=[d for d in (mangrove,coral) if d is not None]
+        selected.extend(d for _,d in ranked if d not in selected)
+        return selected[:top_k]
     return [d for score,d in ranked[:top_k]]
 
 def sources_from(docs):
     return [{'title':d['title'],'url':d['url'],'author':d.get('author','Institutional publication'),'id':d.get('id','')} for d in docs]
+
+def source_excerpt_fallback(question, evidence):
+    """Use labeled source excerpts on empty LLM output, not fake generated responses.
+
+    Only extracts text from the locally stored, attributed educational summaries.
+    This is deliberately not presented as an LLM answer.
+    """
+    if not evidence:
+        return ("No encontré evidencia documental suficiente para responder." if spanish(question)
+                else "No sufficiently relevant documentary evidence was found.")
+    parts=[]
+    for d in evidence[:2]:
+        raw=body(d).strip()
+        if not raw:
+            continue
+        if spanish(question):
+            match=re.search(r'(?:En español:|In Spanish:|En español,)\s*(.*?)(?:\n|$)', raw, re.I)
+            if match:
+                excerpt=match.group(1).strip()
+            else:
+                excerpt=' '.join(re.split(r'(?<=[.!?])\s+',raw)[:2])
+        else:
+            excerpt=' '.join(re.split(r'(?<=[.!?])\s+',raw)[:2])
+        if excerpt:
+            parts.append(f'[S{len(parts)+1}] {excerpt[:600]}')
+    if not parts:
+        return ('Las fuentes recuperadas no contienen texto utilizable.' if spanish(question)
+                else 'Retrieved sources did not contain usable text.')
+    header=('El modelo no produjo una respuesta. Estos son extractos de las fichas documentales recuperadas (no constituyen una respuesta generada por IA):'
+            if spanish(question) else
+            'The model did not return an answer. These are excerpts from retrieved source summaries (not an AI-generated answer):')
+    return header+'\n\n'+'\n\n'.join(parts)
 
 def verify_live_request(q):
     text=norm(q)
@@ -190,13 +248,10 @@ def chat(question, memory, token, model=DEFAULT_MODEL, docs=None, timeout=120):
                            attempt+1, finish_reason, usage.get('completion_tokens','unknown'),
                            list(message.keys()))
 
-        err = ('El modelo no produjo texto visible después de dos intentos. '
-               'Puedes volver a intentarlo; este incidente también sirve para '
-               'evaluar la estabilidad de EcoBot.' if spanish(question) else
-               'The model returned no visible answer after two attempts. '
-               'Please try again; this issue is useful for evaluating EcoBot reliability.')
-        return {'answer':err,'sources':sources_from(evidence),
-                'status':'empty_model_response','model_used':False}
+        fallback=source_excerpt_fallback(question,evidence)
+        memory.add(question,fallback)
+        return {'answer':fallback,'sources':sources_from(evidence),
+                'status':'documentary_fallback_after_empty_llm','model_used':False}
     except requests.exceptions.Timeout:
         logger.warning('Hugging Face request timed out after %ss (read timeout).',timeout)
         return {'answer':('La consulta tardó demasiado y agotó el tiempo de espera. Intenta nuevamente.' if spanish(question) else 'The request timed out. Please retry.'),'sources':sources_from(evidence),'status':'timeout_error','model_used':False}

@@ -108,5 +108,16 @@
     "access_date": "2026-11-18",
     "content": "NOAA Fisheries describes more than 80 mangrove tree species globally. Caribbean mangroves include red, black and white mangrove species. Not all mangrove species occur in the Caribbean. Mangroves protect coasts and support fisheries and wildlife.",
     "notes": "Educational paraphrase from NOAA Fisheries."
+  },
+  {
+    "id": "noaa_coral_reef_functions",
+    "title": "Coral reef ecosystems: ecological functions and coastal protection",
+    "url": "https://www.noaa.gov/education/resource-collections/marine-life/coral-reef-ecosystems",
+    "author": "National Oceanic and Atmospheric Administration (NOAA)",
+    "date": "n.d.",
+    "topic": "coral reefs biodiversity habitat coastal protection function",
+    "license_note": "Educational paraphrase derived from NOAA coral reef ecosystems collection; check source page for reuse notices.",
+    "source_type": "verified_source_based_paraphrase",
+    "text": "Coral reefs support marine biodiversity by offering habitat, food sources, shelter, breeding areas, and nursery areas for numerous fish and other organisms. Healthy reefs also help protect shorelines from waves, storms and erosion. Coastal communities benefit from reef-associated fishing, tourism and recreation. Coral reefs can be harmed by warming seawater, pollution, sedimentation and destructive practices. En español: Los arrecifes de coral proporcionan refugio, alimento y áreas de reproducción para numerosos organismos marinos. También ayudan a proteger las costas frente al oleaje y la erosión y apoyan la pesca y el turismo costero."
   }
 ]
