@@ -6,7 +6,6 @@ from ecobot_hybrid_core import Memory, chat, DEFAULT_MODEL
 st.set_page_config(page_title='EcoBot Hybrid | UNAD',page_icon='🌿',layout='centered')
 st.title('🌿 EcoBot')
 st.caption('Environmental education | Coastal ecosystem conservation | Hybrid documentary retrieval + open LLM')
-st.info('Hybrid prototype: low-memory document retrieval and remote open-model text generation. Answers may be incorrect. The full local E5/Chroma/Qwen research implementation is preserved in Exercise 2.')
 with st.sidebar:
     st.header('About EcoBot')
     st.write('Ask about mangrove species, blue carbon, coral reefs and plastic pollution. Español / English.')
