@@ -131,7 +131,7 @@ def chat(question, memory, token, model=DEFAULT_MODEL, docs=None, timeout=120):
     payload={
         'model':model,
         'messages':messages,
-        'max_tokens':350,
+        'max_tokens':1200,
         'stream':False,
     }
     try:
@@ -160,8 +160,23 @@ def chat(question, memory, token, model=DEFAULT_MODEL, docs=None, timeout=120):
         else:
             answer=str(content or '').strip()
         if not answer:
-            logger.warning('Empty model content; finish_reason=%s; message_keys=%s', choices[0].get('finish_reason'), list(message))
-            raise ValueError('Empty generated response')
+            # Qwen3.5 may consume its output budget in internal reasoning before
+            # producing visible text. Never display or log reasoning_content.
+            finish_reason = choices[0].get('finish_reason', 'unknown')
+            usage = data.get('usage') or {}
+            logger.warning(
+                'Empty visible completion: finish_reason=%s; completion_tokens=%s; '
+                'message_keys=%s. Reasoning content is not logged.',
+                finish_reason, usage.get('completion_tokens', 'unknown'),
+                list(message.keys()),
+            )
+            err = ('El modelo respondió sin texto visible. Puede haber agotado el límite de tokens '
+                   'durante su razonamiento. Intenta una pregunta más breve y revisa los registros.'
+                   if spanish(question) else
+                   'The model returned no visible answer. It may have exhausted its token budget '
+                   'while reasoning. Try a shorter question and inspect the logs.')
+            return {'answer': err, 'sources': sources_from(evidence),
+                    'status': 'empty_model_response', 'model_used': False}
         memory.add(question,answer)
         return {'answer':answer,'sources':sources_from(evidence),'status':'generated_with_remote_llm','model_used':True}
     except requests.exceptions.Timeout:
